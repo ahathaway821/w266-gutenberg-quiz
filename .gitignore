@@ -103,6 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-/document_qa_passages
+/data/nqa_document_qa_passages/*
 
-/squad_document_qa_passages
+/data/nqa_squad_document_qa_passages/*
