@@ -281,8 +281,19 @@ def set_data_split(data, book_data, data_split, train_data, valid_data, test_dat
         test_data['data'].append(book_data) 
         
 def save_train_valid_test_data(data, train_data, valid_data, test_data):
-    squad_json_format_qa = json.dumps(data)
     target_directory = f"{data_directory_filepath}/nqa_squad_document_qa_passages"
+        
+    mini_train_data = {}
+    mini_train_data['version']=version
+    mini_train_data['data'] = []
+    mini_train_data['data'] = train_data['data'][0:1000]
+    
+    squad_json_format_qa = json.dumps(mini_train_data)
+    fq = open(f"{target_directory}/mini_train.data", "w")
+    fq.write(squad_json_format_qa)
+    fq.close()
+    
+    squad_json_format_qa = json.dumps(data)
     fq = open(f"{target_directory}/all.data", "w")
     fq.write(squad_json_format_qa)
     fq.close()
@@ -302,6 +313,8 @@ def save_train_valid_test_data(data, train_data, valid_data, test_data):
     fq.write(squad_json_format_qa)
     fq.close()
     
+    return train_data, valid_data, test_data, mini_train_data
+    
 # Loop through available documents, retrieve the top passages for each question/answer pair
 # Write the returned passages to document_qa_passages directory for later use
 # Pairs written as directionary of form {q: [passage, passage, etc]}
@@ -320,26 +333,26 @@ def save_train_valid_test_data(data, train_data, valid_data, test_data):
 def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1):
     with open(f'{narrative_qa_repo_filepath}/documents.csv') as f1:
         rows = csv.DictReader(f1, delimiter=',')
-        i = 0
-        s = 0
-        q = 0
+        i = 0 # document iterator index
+        s = 0 # number of skipped question pairs
+        q = 0 # number of total question pairs saved
         document_id=""
         version = "1.0"
 
         data = {}
-        data['version']=version
+        data['version'] = version
         data['data'] = []
         
         train_data = {}
-        train_data['version']=version
+        train_data['version'] = version
         train_data['data'] = []
         
         valid_data = {}
-        valid_data['version']=version
+        valid_data['version'] = version
         valid_data['data'] = []
         
         test_data = {}
-        test_data['version']=version
+        test_data['version'] = version
         test_data['data'] = []
         
         for doc in rows:
