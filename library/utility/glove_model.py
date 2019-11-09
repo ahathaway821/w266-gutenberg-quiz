@@ -44,7 +44,10 @@ def download_glove(data_dir_path, embedding_size=None):
 def load_glove(data_dir_path, embedding_size=None):
     if embedding_size is None:
         embedding_size = 100
-    file_path = data_dir_path + "/glove.6B." + str(embedding_size) + "d.txt"
+
+    sub_path = "/glove.6B." + str(embedding_size) + "d.txt"
+    file_path = data_dir_path / sub_path
+
     download_glove(data_dir_path, embedding_size)
     _word2em = {}
     file = open(file_path, mode='rt', encoding='utf8')
