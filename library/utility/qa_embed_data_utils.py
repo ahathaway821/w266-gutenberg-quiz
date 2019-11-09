@@ -1,7 +1,7 @@
 from collections import Counter
 import numpy as np
 from sklearn.model_selection import train_test_split
-from library.utility.text_utils import in_white_list
+from ..utility.text_utils import in_white_list
 import nltk
 
 

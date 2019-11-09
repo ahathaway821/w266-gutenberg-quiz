@@ -5,13 +5,14 @@ from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import nltk
 import os
-from library.utility.glove_model import GloveModel
-from library.utility.qa_embed_data_utils import SQuADSeq2SeqEmbTupleSamples
-from library.utility.text_utils import in_white_list
+from ..utility
+from ..utility.glove_model import GloveModel
+from ..utility.qa_embed_data_utils import SQuADSeq2SeqEmbTupleSamples
+from ..utility.text_utils import in_white_list
 
 from tensorflow.python.keras.layers import Input, GRU, Dense, Concatenate, TimeDistributed, Bidirectional
 from tensorflow.python.keras.models import Model
-from layers.attention import AttentionLayer
+from ..layers.attention import AttentionLayer
 
 def generate_batch(ds, input_word2em_data, output_data, batch_size):
     num_batches = len(input_word2em_data) // batch_size
