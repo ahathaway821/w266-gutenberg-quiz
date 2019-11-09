@@ -1,9 +1,8 @@
 import json
 import nltk
 
-from library.utility.qa_data_utils import QADataSet
-from library.utility.text_utils import in_white_list
-
+from .qa_data_utils import QADataSet
+from .text_utils import in_white_list
 
 def load_squad(data, data_path, max_data_count=None,
                max_context_seq_length=None,

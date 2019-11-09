@@ -6,8 +6,8 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.callbacks import ModelCheckpoint
 import os
 
-from library.utility import text_utils
-from library.utility.qa_data_utils import Seq2SeqTupleSamples
+from ..utility import text_utils
+from ..utility.qa_data_utils import Seq2SeqTupleSamples
 import numpy as np
 
 

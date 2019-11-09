@@ -1,5 +1,5 @@
-from library.models.seq2seq_att import Seq2SeqAtt
-from library.utility.squad import SquADDataSet
+from ..library.models.seq2seq_att import Seq2SeqAtt
+from ..library.utility.squad import SquADDataSet
 import numpy as np
 
 

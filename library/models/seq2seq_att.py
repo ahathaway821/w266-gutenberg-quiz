@@ -5,7 +5,6 @@ from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import nltk
 import os
-from ..utility
 from ..utility.glove_model import GloveModel
 from ..utility.qa_embed_data_utils import SQuADSeq2SeqEmbTupleSamples
 from ..utility.text_utils import in_white_list
