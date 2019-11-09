@@ -22,10 +22,11 @@ def download_glove(data_dir_path, embedding_size=None):
     if embedding_size is None:
         embedding_size = 100
     sub_path = "/glove.6B." + str(embedding_size) + "d.txt"
-    file_path = data_dir_path / sub_path
-    if not os.path.exists(file_path):
+    file_path = str(data_dir_path) + sub_path
 
-        glove_zip = 'embeddings/glove.6B.zip'
+    if not os.path.exists(file_path):
+        print("download path doesn exist")
+        glove_zip = str(data_dir_path) + '/glove.6B.zip'
 
         if not os.path.exists('embeddings'):
             os.makedirs('embeddings')
@@ -37,7 +38,7 @@ def download_glove(data_dir_path, embedding_size=None):
 
         print('unzipping glove file')
         zip_ref = zipfile.ZipFile(glove_zip, 'r')
-        zip_ref.extractall('embeddings')
+         zip_ref.extractall(str(data_dir_path))
         zip_ref.close()
 
 
@@ -46,10 +47,11 @@ def load_glove(data_dir_path, embedding_size=None):
         embedding_size = 100
 
     sub_path = "/glove.6B." + str(embedding_size) + "d.txt"
-    file_path = data_dir_path / sub_path
+    file_path = str(data_dir_path) + sub_path
 
     download_glove(data_dir_path, embedding_size)
     _word2em = {}
+    print(file_path)
     file = open(file_path, mode='rt', encoding='utf8')
     for line in file:
         words = line.strip().split()

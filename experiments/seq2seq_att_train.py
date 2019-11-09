@@ -6,7 +6,7 @@ import pathlib
 
 def main():
     random_state = 42
-    output_dir_path = './models'
+    output_dir_path = str(pathlib.Path(__file__).parent / 'models')
 
     np.random.seed(random_state)
     fn = pathlib.Path(__file__).parent.parent / 'data/SQuAD/train-v1.1.json'

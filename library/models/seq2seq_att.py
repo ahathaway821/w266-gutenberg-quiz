@@ -142,7 +142,7 @@ class Seq2SeqAtt(object):
         data_set_seq2seq = SQuADSeq2SeqEmbTupleSamples(data_set, self.glove_model.word2em,
                                                        self.glove_model.embedding_size,
                                                        max_target_vocab_size=max_target_vocab_size)
-        data_set_seq2seq.save(model_dir_path, 'qa-glove')
+        data_set_seq2seq.save(model_dir_path, 'qa-glove-att')
 
         x_train, x_test, y_train, y_test = data_set_seq2seq.split(test_size=test_size, random_state=random_state)
 
