@@ -1,6 +1,7 @@
 from ..library.models.seq2seq_att import Seq2SeqAtt
 from ..library.utility.squad import SquADDataSet
 import numpy as np
+import pathlib
 
 
 def main():
@@ -8,10 +9,12 @@ def main():
     output_dir_path = './models'
 
     np.random.seed(random_state)
-    data_set = SquADDataSet(data_path='../data/SQuAD/train-v1.1.json')
+    fn = pathlib.Path(__file__).parent.parent / 'data/SQuAD/train-v1.1.json'
+    data_set = SquADDataSet(data_path=fn)
 
     qa = Seq2SeqAtt()
-    qa.load_glove_model('../embeddings')
+    directory = pathlib.Path(__file__).parent.parent / 'embeddings'
+    qa.load_glove_model(directory)
     batch_size = 64
     epochs = 200
     history = qa.fit(data_set, model_dir_path=output_dir_path,
