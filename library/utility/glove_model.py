@@ -3,7 +3,7 @@ import os
 import sys
 import zipfile
 import numpy as np
-
+import pathlib
 
 def reporthook(block_num, block_size, total_size):
     read_so_far = block_num * block_size
@@ -21,7 +21,8 @@ def reporthook(block_num, block_size, total_size):
 def download_glove(data_dir_path, embedding_size=None):
     if embedding_size is None:
         embedding_size = 100
-    file_path = data_dir_path + "/glove.6B." + str(embedding_size) + "d.txt"
+    sub_path = "/glove.6B." + str(embedding_size) + "d.txt"
+    file_path = data_dir_path / sub_path
     if not os.path.exists(file_path):
 
         glove_zip = 'embeddings/glove.6B.zip'
