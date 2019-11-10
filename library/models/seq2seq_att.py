@@ -72,14 +72,14 @@ class Seq2SeqAtt(object):
 
     def create_model(self):
         hidden_size = 256
-        enc_timesteps = 50
+        enc_timesteps = self.max_encoder_seq_length
         #timesteps = self.max_encoder_seq_length #perhaps making timesteps size of max sequence length would work?????""
-        dec_timestaps = 50
+        dec_timesteps = self.max_decoder_seq_length
         print(f"embedding size: {self.glove_model.embedding_size}")
         # encoder_inputs = Input(shape=(None, self.glove_model.embedding_size), name='encoder_inputs')
         # decoder_inputs = Input(shape=(None, self.num_decoder_tokens), name='decoder_inputs')
         encoder_inputs = Input(shape=(enc_timesteps, self.glove_model.embedding_size), name='encoder_inputs')
-        decoder_inputs = Input(shape=(dec_timesteps - 1, self.num_decoder_tokens), name='decoder_inputs')
+        decoder_inputs = Input(shape=(dec_timesteps, self.num_decoder_tokens), name='decoder_inputs')
         
         # Encoder GRU
         encoder_gru = Bidirectional(GRU(hidden_size, return_sequences=True, return_state=True, name='encoder_gru'), name='bidirectional_encoder')
