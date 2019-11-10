@@ -182,8 +182,8 @@ class Seq2SeqAtt(object):
         train_num_batches = len(x_train) // batch_size
         test_num_batches = len(x_test) // batch_size
 
-        ds_train = tf.data.Dataset.from_generator(train_gen, ([tf.int64,tf.int64], tf.int64))
-        ds_test = tf.data.Dataset.from_generator(test_gen, ([tf.int64,tf.int64], tf.int64))
+        ds_train = tf.data.Dataset.from_generator(generate_batch, ([tf.int64,tf.int64], tf.int64), args=[data_set_seq2seq, x_train, y_train, batch_size])
+        ds_test = tf.data.Dataset.from_generator(generate_batch, ([tf.int64,tf.int64], tf.int64), args=[data_set_seq2seq, x_test, y_test, batch_size])
 
         checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=save_best_only)
 
