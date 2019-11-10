@@ -72,8 +72,10 @@ class Seq2SeqAtt(object):
 
     def create_model(self):
         hidden_size = 256
-        timesteps = 100
-
+        enc_timesteps = 50
+        #timesteps = self.max_encoder_seq_length #perhaps making timesteps size of max sequence length would work?????""
+        dec_timestapes = 50
+        print(f"embedding size: {self.glove_model.embedding_size}")
         # encoder_inputs = Input(shape=(None, self.glove_model.embedding_size), name='encoder_inputs')
         # decoder_inputs = Input(shape=(None, self.num_decoder_tokens), name='decoder_inputs')
         encoder_inputs = Input(shape=(timesteps, self.glove_model.embedding_size), name='encoder_inputs')
@@ -111,7 +113,7 @@ class Seq2SeqAtt(object):
         batch_size = 1
 
         """ Encoder (Inference) model """
-        encoder_inf_inputs = Input(batch_shape=(batch_size, timesteps, self.num_encoder_tokens), name='encoder_inf_inputs')
+        encoder_inf_inputs = Input(batch_shape=(batch_size, timesteps, self.glove_model.embedding_size), name='encoder_inf_inputs')
         encoder_inf_out, encoder_inf_fwd_state, encoder_inf_back_state = encoder_gru(encoder_inf_inputs)
         self.encoder_model = Model(inputs=encoder_inf_inputs, outputs=[encoder_inf_out, encoder_inf_fwd_state, encoder_inf_back_state])
 
@@ -154,6 +156,9 @@ class Seq2SeqAtt(object):
         self.max_encoder_seq_length = data_set_seq2seq.input_max_seq_length
         self.max_decoder_seq_length = data_set_seq2seq.target_max_seq_length
         self.num_decoder_tokens = data_set_seq2seq.num_target_tokens
+        print(f'max_encoder_seq_length: {max_encoder_seq_length}')
+        print(f'max_decoder_seq_length: {max_decoder_seq_length}')
+        print(f'num_decoder_tokens: {num_decoder_tokens}')
 
         weight_file_path = self.get_weight_file_path(model_dir_path)
         architecture_file_path = self.get_architecture_file_path(model_dir_path)

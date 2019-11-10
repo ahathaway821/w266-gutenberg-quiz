@@ -38,7 +38,7 @@ def download_glove(data_dir_path, embedding_size=None):
 
         print('unzipping glove file')
         zip_ref = zipfile.ZipFile(glove_zip, 'r')
-         zip_ref.extractall(str(data_dir_path))
+        zip_ref.extractall(str(data_dir_path))
         zip_ref.close()
 
 
