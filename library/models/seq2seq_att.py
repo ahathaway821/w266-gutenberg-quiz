@@ -74,12 +74,12 @@ class Seq2SeqAtt(object):
         hidden_size = 256
         enc_timesteps = 50
         #timesteps = self.max_encoder_seq_length #perhaps making timesteps size of max sequence length would work?????""
-        dec_timestapes = 50
+        dec_timestaps = 50
         print(f"embedding size: {self.glove_model.embedding_size}")
         # encoder_inputs = Input(shape=(None, self.glove_model.embedding_size), name='encoder_inputs')
         # decoder_inputs = Input(shape=(None, self.num_decoder_tokens), name='decoder_inputs')
-        encoder_inputs = Input(shape=(timesteps, self.glove_model.embedding_size), name='encoder_inputs')
-        decoder_inputs = Input(shape=(timesteps - 1, self.num_decoder_tokens), name='decoder_inputs')
+        encoder_inputs = Input(shape=(enc_timesteps, self.glove_model.embedding_size), name='encoder_inputs')
+        decoder_inputs = Input(shape=(dec_timesteps - 1, self.num_decoder_tokens), name='decoder_inputs')
         
         # Encoder GRU
         encoder_gru = Bidirectional(GRU(hidden_size, return_sequences=True, return_state=True, name='encoder_gru'), name='bidirectional_encoder')
@@ -113,13 +113,13 @@ class Seq2SeqAtt(object):
         batch_size = 1
 
         """ Encoder (Inference) model """
-        encoder_inf_inputs = Input(batch_shape=(batch_size, timesteps, self.glove_model.embedding_size), name='encoder_inf_inputs')
+        encoder_inf_inputs = Input(batch_shape=(batch_size, enc_timesteps, self.glove_model.embedding_size), name='encoder_inf_inputs')
         encoder_inf_out, encoder_inf_fwd_state, encoder_inf_back_state = encoder_gru(encoder_inf_inputs)
         self.encoder_model = Model(inputs=encoder_inf_inputs, outputs=[encoder_inf_out, encoder_inf_fwd_state, encoder_inf_back_state])
 
         """ Decoder (Inference) model """
         decoder_inf_inputs = Input(batch_shape=(batch_size, 1, self.num_decoder_tokens), name='decoder_word_inputs')
-        encoder_inf_states = Input(batch_shape=(batch_size, timesteps, 2*hidden_size), name='encoder_inf_states')
+        encoder_inf_states = Input(batch_shape=(batch_size, dec_timesteps, 2*hidden_size), name='encoder_inf_states')
         decoder_init_state = Input(batch_shape=(batch_size, 2*hidden_size), name='decoder_init')
 
         decoder_inf_out, decoder_inf_state = decoder_gru(
@@ -156,9 +156,9 @@ class Seq2SeqAtt(object):
         self.max_encoder_seq_length = data_set_seq2seq.input_max_seq_length
         self.max_decoder_seq_length = data_set_seq2seq.target_max_seq_length
         self.num_decoder_tokens = data_set_seq2seq.num_target_tokens
-        print(f'max_encoder_seq_length: {max_encoder_seq_length}')
-        print(f'max_decoder_seq_length: {max_decoder_seq_length}')
-        print(f'num_decoder_tokens: {num_decoder_tokens}')
+        print(f'max_encoder_seq_length: {self.max_encoder_seq_length}')
+        print(f'max_decoder_seq_length: {self.max_decoder_seq_length}')
+        print(f'num_decoder_tokens: {self.num_decoder_tokens}')
 
         weight_file_path = self.get_weight_file_path(model_dir_path)
         architecture_file_path = self.get_architecture_file_path(model_dir_path)
