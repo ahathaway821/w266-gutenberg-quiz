@@ -13,6 +13,7 @@ from tensorflow.python.keras.layers import Input, GRU, Dense, Concatenate, TimeD
 from tensorflow.python.keras.models import Model
 from ..layers.attention import AttentionLayer
 import tensorflow.contrib
+import tensorflow.logging
 
 import os
 import pprint
@@ -180,14 +181,15 @@ class Seq2SeqAtt(object):
 
         checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=save_best_only)
 
+#########COLAB##########
         TPU_WORKER = 'grpc://' + os.environ['COLAB_TPU_ADDR']
-        tf.logging.set_verbosity(tf.logging.INFO)
+        tensorflow.logging.logging.set_verbosity(tensorflow.logging.logging.INFO)
 
         self.model = tensorflow.contrib.tpu.keras_to_tpu_model(
             self.model,
             strategy=tensorflow.contrib.tpu.TPUDistributionStrategy(
                 tensorflow.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
-
+#######################
 
         history = self.model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
                                            epochs=epochs,
