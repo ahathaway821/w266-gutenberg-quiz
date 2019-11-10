@@ -74,8 +74,10 @@ class Seq2SeqAtt(object):
         hidden_size = 256
         timesteps = 100
 
-        encoder_inputs = Input(shape=(None, self.glove_model.embedding_size), name='encoder_inputs')
-        decoder_inputs = Input(shape=(None, self.num_decoder_tokens), name='decoder_inputs')
+        # encoder_inputs = Input(shape=(None, self.glove_model.embedding_size), name='encoder_inputs')
+        # decoder_inputs = Input(shape=(None, self.num_decoder_tokens), name='decoder_inputs')
+        encoder_inputs = Input(shape=(timesteps, self.glove_model.embedding_size), name='encoder_inputs')
+        decoder_inputs = Input(shape=(timesteps - 1, self.num_decoder_tokens), name='decoder_inputs')
         
         # Encoder GRU
         encoder_gru = Bidirectional(GRU(hidden_size, return_sequences=True, return_state=True, name='encoder_gru'), name='bidirectional_encoder')
