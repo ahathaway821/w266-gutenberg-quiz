@@ -12,6 +12,10 @@ from ..utility.text_utils import in_white_list
 from tensorflow.python.keras.layers import Input, GRU, Dense, Concatenate, TimeDistributed, Bidirectional
 from tensorflow.python.keras.models import Model
 from ..layers.attention import AttentionLayer
+import tensorflow.contrib
+
+import os
+import pprint
 
 def generate_batch(ds, input_word2em_data, output_data, batch_size):
     num_batches = len(input_word2em_data) // batch_size
@@ -175,6 +179,15 @@ class Seq2SeqAtt(object):
         test_num_batches = len(x_test) // batch_size
 
         checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=save_best_only)
+
+        TPU_WORKER = 'grpc://' + os.environ['COLAB_TPU_ADDR']
+        tf.logging.set_verbosity(tf.logging.INFO)
+
+        self.model = tensorflow.contrib.tpu.keras_to_tpu_model(
+            self.model,
+            strategy=tensorflow.contrib.tpu.TPUDistributionStrategy(
+                tensorflow.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
+
 
         history = self.model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
                                            epochs=epochs,
