@@ -113,7 +113,7 @@ class Seq2SeqAtt(object):
 
             # Full model
             self.model = Model(inputs=[encoder_inputs, decoder_inputs], outputs=decoder_pred)
-            self.model.compile(optimizer=tf.train.RMSPropOptimizer(learning_rate=0.01) loss='categorical_crossentropy')
+            self.model.compile(optimizer=tf.train.RMSPropOptimizer(learning_rate=0.01), loss='categorical_crossentropy')
 
             self.model.summary()
 
@@ -182,6 +182,9 @@ class Seq2SeqAtt(object):
         train_num_batches = len(x_train) // batch_size
         test_num_batches = len(x_test) // batch_size
 
+        ds_train = tf.data.Dataset.from_generator(train_gen, ([tf.int64,tf.int64], tf.int64))
+        ds_test = tf.data.Dataset.from_generator(test_gen, ([tf.int64,tf.int64], tf.int64))
+
         checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=save_best_only)
 
 #########COLAB##########
@@ -194,9 +197,9 @@ class Seq2SeqAtt(object):
         #        tensorflow.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
 #######################
 
-        history = self.model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
+        history = self.model.fit(ds_train, steps_per_epoch=train_num_batches,
                                            epochs=epochs,
-                                           verbose=1, validation_data=test_gen, validation_steps=test_num_batches,
+                                           verbose=1, validation_data=ds_test, validation_steps=test_num_batches,
                                            callbacks=[checkpoint])
 
         self.model.save_weights(weight_file_path)
