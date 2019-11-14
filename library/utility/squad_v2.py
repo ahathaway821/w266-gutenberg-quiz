@@ -20,14 +20,14 @@ def load_squad(contexts, questions, answers, data_path, max_data_count=None,
                 qas = paragraph['qas']
                 for qas_instance in qas:
                     question = qas_instance['question']
-                    answers = qas_instance['answers']
-                    for answer in answers:
+                    answers_list = qas_instance['answers']
+                    for answer in answers_list:
                         ans = answer['text']
                         contexts.append(preprocess_sentence(context))
                         questions.append(preprocess_sentence(question))
                         answers.append(preprocess_sentence(ans))
 
-                if len(contexts) >= max_data_count:
+                if max_data_count != None and len(contexts) >= max_data_count:
                     break
 
                 break
