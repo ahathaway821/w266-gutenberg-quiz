@@ -3,8 +3,8 @@ from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import Input, LSTM, Dense, Embedding, Dropout, add, RepeatVector, GRU, Concatenate, TimeDistributed, Bidirectional
 from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 
-from library.utility import text_utils
-from library.utility.qa_data_utils import Seq2SeqTripleSamples
+from ..utility import text_utils
+from ..utility.qa_data_utils import Seq2SeqTripleSamples
 import numpy as np
 import nltk
 import os
@@ -46,7 +46,7 @@ def generate_batch(ds, input_data, output_data, batch_size):
                    decoder_input_data_batch], decoder_target_data_batch
 
 
-class Seq2SeqV2QA(object):
+class Seq2SeqV2_Att_QA(object):
     model_name = 'seq2seq-qa-v2-att'
 
     def __init__(self):

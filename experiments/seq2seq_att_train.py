@@ -1,5 +1,5 @@
 from ..library.models.seq2seq_att import Seq2SeqAtt
-from ..library.utility.squad_v2 import SquADDataSetV2
+from ..library.utility.squad import SquADDataSet
 import numpy as np
 import pathlib
 
@@ -10,7 +10,7 @@ def main():
 
     np.random.seed(random_state)
     fn = pathlib.Path(__file__).parent.parent / 'data/SQuAD/train-v1.1.json'
-    data_set = SquADDataSetV2(data_path=fn)
+    data_set = SquADDataSet(data_path=fn)
 
     qa = Seq2SeqAtt()
     directory = pathlib.Path(__file__).parent.parent / 'embeddings'

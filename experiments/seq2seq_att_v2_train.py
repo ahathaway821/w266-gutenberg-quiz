@@ -1,5 +1,6 @@
-from ..library.models.seq2seq_att_v2 import Seq2SeqAttV2
+from ..library.models.seq2seq_att_v2 import Seq2SeqV2_Att_QA
 from ..library.utility.squad_v2 import SquADDataSetV2
+
 import numpy as np
 import pathlib
 
