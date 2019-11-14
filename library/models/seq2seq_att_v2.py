@@ -68,11 +68,11 @@ class Seq2SeqV2_Att_QA(object):
 
     @staticmethod
     def get_architecture_file_path(model_dir_path):
-        return os.path.join(model_dir_path, Seq2SeqV2QA.model_name + '-architecture.json')
+        return os.path.join(model_dir_path, Seq2SeqV2_Att_QA.model_name + '-architecture.json')
 
     @staticmethod
     def get_weight_file_path(model_dir_path):
-        return os.path.join(model_dir_path, Seq2SeqV2QA.model_name + '-weights.h5')
+        return os.path.join(model_dir_path, Seq2SeqV2_Att_QA.model_name + '-weights.h5')
 
     def load_model(self, model_dir_path):
         self.input_paragraph_word2idx = np.load(
@@ -128,7 +128,7 @@ class Seq2SeqV2_Att_QA(object):
         return tf.reduce_mean(loss_)
 
     @tf.function
-    def train_step(self, q, c, a, q_enc_hidden, c_enc_hidden, question_encoder, context_encoder, answers, optimizer, decoder, loss_object):
+    def train_step(self, q, c, a, q_enc_hidden, c_enc_hidden, question_encoder, context_encoder, answers_tokenizer, optimizer, decoder, loss_object):
         loss = 0
         BATCH_SIZE=64
 
@@ -139,7 +139,7 @@ class Seq2SeqV2_Att_QA(object):
             dec_hidden = tf.concat(q_enc_hidden, c_enc_hidden, axis=-1)
             enc_output = tf.concat(q_enc_output, c_enc_output, axis=-1)
 
-            dec_input = tf.expand_dims([answers.word_index['<start>']] * BATCH_SIZE, 1)
+            dec_input = tf.expand_dims([answers_tokenizer.word_index['<start>']] * BATCH_SIZE, 1)
 
             # Teacher forcing - feeding the target as the next input
             for t in range(1, a.shape[1]):
@@ -192,9 +192,9 @@ class Seq2SeqV2_Att_QA(object):
         steps_per_epoch = len(question_tensor_train) //  batch_size
         embedding_dim = 256
         units = 1024
-        vocab_question_size = len(questions.word_index) + 1
-        vocab_context_size = len(contexts.word_index) + 1
-        vocab_answer_size = len(answers.word_index) + 1
+        vocab_question_size = len(question_tokenizer.word_index) + 1
+        vocab_context_size = len(context_tokenizer.word_index) + 1
+        vocab_answer_size = len(answer_tokenizer.word_index) + 1
 
         dataset = tf.data.Dataset.from_tensor_slices((question_tensor_train, context_tensor_train, answer_tensor_train)).shuffle(buffer_size)
         dataset = dataset.batch(batch_size, drop_remainder=True)
@@ -224,7 +224,7 @@ class Seq2SeqV2_Att_QA(object):
             total_loss = 0
 
             for (batch, (q, c, a)) in enumerate(dataset.take(steps_per_epoch)):
-                batch_loss = self.train_step(q, c, a, question_enc_hidden, context_enc_hidden, question_encoder, context_encoder, answers, optimizer, decoder, loss_object)
+                batch_loss = self.train_step(q, c, a, question_enc_hidden, context_enc_hidden, question_encoder, context_encoder, answer_tokenizer, optimizer, decoder, loss_object)
                 total_loss += batch_loss
 
                 if batch % 100 == 0:

@@ -13,10 +13,10 @@ def main():
     fn = pathlib.Path(__file__).parent.parent / 'data/SQuAD/train-v1.1.json'
     data_set = SquADDataSetV2(data_path=fn)
 
-    qa = Seq2SeqAttV2()
+    qa = Seq2SeqV2_Att_QA()
     batch_size = 64
     epochs = 20
-    history = qa.fit(data_set, model_dir_path=output_dir_path,
+    history = qa.fit(data_set.contexts, data_set.questions, data_set.answers, model_dir_path=output_dir_path,
                      batch_size=batch_size, epochs=epochs,
                      random_state=random_state)
 

@@ -1,10 +1,4 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-
-try:
-  # %tensorflow_version only exists in Colab.
-    %tensorflow_version 2.x
-except Exception:
-    pass
 import tensorflow as tf
 
 import matplotlib.pyplot as plt
@@ -31,6 +25,10 @@ def in_white_list(_word):
         return False
 
     return True
+
+def unicode_to_ascii(s):
+    return ''.join(c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn')
 
 def preprocess_sentence(w):
     w = unicode_to_ascii(w.lower().strip())

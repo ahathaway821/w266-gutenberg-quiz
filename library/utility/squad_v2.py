@@ -43,7 +43,7 @@ class SquADDataSetV2(QADataSet):
                  max_context_seq_length=None,
                  max_question_seq_length=None,
                  max_target_seq_length=None):
-        super(SquADDataSet, self).__init__()
+        super(SquADDataSetV2, self).__init__()
 
         load_squad(self.contexts, self.questions, self.answers, data_path=data_path,
                    max_data_count=max_data_count,
