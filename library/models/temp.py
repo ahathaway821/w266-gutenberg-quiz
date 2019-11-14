@@ -16,11 +16,27 @@ import tensorflow as tf
 import os
 import pprint
 
-
+def generate_batch(ds, input_word2em_data, output_data, batch_size):
+    num_batches = len(input_word2em_data) // batch_size
+    while True:
+        for batchIdx in range(0, num_batches):
+            start = batchIdx * batch_size
+            end = (batchIdx + 1) * batch_size
+            encoder_input_data_batch = pad_sequences(input_word2em_data[start:end], ds.input_max_seq_length)
+            decoder_target_data_batch = np.zeros(shape=(batch_size, ds.target_max_seq_length, ds.num_target_tokens))
+            decoder_input_data_batch = np.zeros(shape=(batch_size, ds.target_max_seq_length, ds.num_target_tokens))
+            for lineIdx, target_wid_list in enumerate(output_data[start:end]):
+                for idx, wid in enumerate(target_wid_list):
+                    if wid == 0:  # UNKNOWN
+                        continue
+                    decoder_input_data_batch[lineIdx, idx, wid] = 1
+                    if idx > 0:
+                        decoder_target_data_batch[lineIdx, idx - 1, wid] = 1
+            yield [encoder_input_data_batch, decoder_input_data_batch], decoder_target_data_batch
 
 
 class Seq2SeqAtt(object):
-    model_name = 'seq2seq-qa-glove-att'
+    model_name = 'seq2seq-qa-glove'
 
     def __init__(self):
         self.model = None
@@ -32,29 +48,6 @@ class Seq2SeqAtt(object):
         self.max_encoder_seq_length = None
         self.num_decoder_tokens = None
         self.glove_model = GloveModel()
-
-        self.data_set_seq2seq = None
-        self.input_word2em_data = None
-        self.output_data = None
-        self.batch_size = None
-
-    def generate_batch(self):
-        num_batches = len(self.input_word2em_data) // batch_size
-        while True:
-            for batchIdx in range(0, num_batches):
-                start = batchIdx * self.batch_size
-                end = (batchIdx + 1) * self.batch_size
-                encoder_input_data_batch = pad_sequences(self.input_word2em_data[start:end], ds.input_max_seq_length)
-                decoder_target_data_batch = np.zeros(shape=(self.batch_size, ds.target_max_seq_length, ds.num_target_tokens))
-                decoder_input_data_batch = np.zeros(shape=(self.batch_size, ds.target_max_seq_length, ds.num_target_tokens))
-                for lineIdx, target_wid_list in enumerate(self.output_data[start:end]):
-                    for idx, wid in enumerate(target_wid_list):
-                        if wid == 0:  # UNKNOWN
-                            continue
-                        decoder_input_data_batch[lineIdx, idx, wid] = 1
-                        if idx > 0:
-                            decoder_target_data_batch[lineIdx, idx - 1, wid] = 1
-                yield [encoder_input_data_batch, decoder_input_data_batch], decoder_target_data_batch
 
     @staticmethod
     def get_architecture_file_path(model_dir_path):
@@ -120,7 +113,7 @@ class Seq2SeqAtt(object):
 
             # Full model
             self.model = Model(inputs=[encoder_inputs, decoder_inputs], outputs=decoder_pred)
-            self.model.compile(optimizer=tf.train.RMSPropOptimizer(learning_rate=0.01), loss='categorical_crossentropy')
+            self.model.compile(optimizer=tf.train.RMSPropOptimizer(learning_rate=0.01) loss='categorical_crossentropy')
 
             self.model.summary()
 
@@ -146,7 +139,7 @@ class Seq2SeqAtt(object):
                                 outputs=[decoder_inf_pred, attn_inf_states, decoder_inf_state])
 
     def fit(self, data_set, model_dir_path, epochs=None, batch_size=None, test_size=None, random_state=None,
-            save_best_only=False, max_target_vocab_size=None, num_examples=None):
+            save_best_only=False, max_target_vocab_size=None):
         if batch_size is None:
             batch_size = 64
         if epochs is None:
@@ -183,23 +176,11 @@ class Seq2SeqAtt(object):
         with open(architecture_file_path, 'w') as f:
             f.write(self.model.to_json())
 
-        self.data_set_seq2seq = data_set_seq2seq
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
-        self.batch_size = batch_size
-
-        train_gen = self.generate_batch()
-        test_gen = self.generate_batch(data_set_seq2seq, x_test, y_test, batch_size)
+        train_gen = generate_batch(data_set_seq2seq, x_train, y_train, batch_size)
+        test_gen = generate_batch(data_set_seq2seq, x_test, y_test, batch_size)
 
         train_num_batches = len(x_train) // batch_size
         test_num_batches = len(x_test) // batch_size
-
- 
-
-        ds_train = tf.data.Dataset.from_generator(train_gen, ([tf.int64,tf.int64], tf.int64))
-        ds_test = tf.data.Dataset.from_generator(test_gen, ([tf.int64,tf.int64], tf.int64))
 
         checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=save_best_only)
 
@@ -213,9 +194,9 @@ class Seq2SeqAtt(object):
         #        tensorflow.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
 #######################
 
-        history = self.model.fit(ds_train, steps_per_epoch=train_num_batches,
+        history = self.model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
                                            epochs=epochs,
-                                           verbose=1, validation_data=ds_test, validation_steps=test_num_batches,
+                                           verbose=1, validation_data=test_gen, validation_steps=test_num_batches,
                                            callbacks=[checkpoint])
 
         self.model.save_weights(weight_file_path)
