@@ -146,7 +146,7 @@ class Seq2SeqAtt(object):
                                 outputs=[decoder_inf_pred, attn_inf_states, decoder_inf_state])
 
     def fit(self, data_set, model_dir_path, epochs=None, batch_size=None, test_size=None, random_state=None,
-            save_best_only=False, max_target_vocab_size=None, num_examples=None):
+            save_best_only=False, max_target_vocab_size=None):
         if batch_size is None:
             batch_size = 64
         if epochs is None:
