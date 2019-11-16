@@ -16,21 +16,13 @@ import tensorflow as tf
 import os
 import pprint
 
-def generate_batch(ds, input_data, output_data, batch_size):
-    num_batches = len(input_data) // batch_size
+def generate_batch(ds, input_word2em_data, output_data, batch_size):
+    num_batches = len(input_word2em_data) // batch_size
     while True:
         for batchIdx in range(0, num_batches):
             start = batchIdx * batch_size
             end = (batchIdx + 1) * batch_size
-            encoder_input_paragraph_data_batch = []
-            encoder_input_question_data_batch = []
-            for input_paragraph_data, input_question_data in input_data[start:end]:
-                encoder_input_paragraph_data_batch.append(input_paragraph_data)
-                encoder_input_question_data_batch.append(input_question_data)
-            encoder_input_paragraph_data_batch = pad_sequences(encoder_input_paragraph_data_batch,
-                                                               ds.input_paragraph_max_seq_length)
-            encoder_input_question_data_batch = pad_sequences(encoder_input_question_data_batch,
-                                                              ds.input_question_max_seq_length)
+            encoder_input_data_batch = pad_sequences(input_word2em_data[start:end], ds.input_max_seq_length)
             decoder_target_data_batch = np.zeros(shape=(batch_size, ds.target_max_seq_length, ds.num_target_tokens))
             decoder_input_data_batch = np.zeros(shape=(batch_size, ds.target_max_seq_length, ds.num_target_tokens))
             for lineIdx, target_wid_list in enumerate(output_data[start:end]):
@@ -40,8 +32,7 @@ def generate_batch(ds, input_data, output_data, batch_size):
                     decoder_input_data_batch[lineIdx, idx, wid] = 1
                     if idx > 0:
                         decoder_target_data_batch[lineIdx, idx - 1, wid] = 1
-            yield [encoder_input_paragraph_data_batch, encoder_input_question_data_batch,
-                   decoder_input_data_batch], decoder_target_data_batch
+            yield [encoder_input_data_batch, decoder_input_data_batch], decoder_target_data_batch
 
 class Seq2SeqAtt(object):
     model_name = 'seq2seq-qa-glove-att'
