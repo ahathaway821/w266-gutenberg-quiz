@@ -136,8 +136,8 @@ class Seq2SeqV2_Att_QA(object):
             q_enc_output, q_enc_hidden = question_encoder(q, q_enc_hidden)
             c_enc_output, c_enc_hidden = context_encoder(c, c_enc_hidden)
 
-            dec_hidden = tf.concat(q_enc_hidden, c_enc_hidden, axis=-1)
-            enc_output = tf.concat(q_enc_output, c_enc_output, axis=-1)
+            dec_hidden = tf.concat([q_enc_hidden, c_enc_hidden], axis=1)
+            enc_output = tf.concat([q_enc_output, c_enc_output], axis=1)
 
             dec_input = tf.expand_dims([answers_tokenizer.word_index['<start>']] * BATCH_SIZE, 1)
 
