@@ -16,28 +16,6 @@ import tensorflow as tf
 import os
 import pprint
 
-
-
-
-class Seq2SeqAtt(object):
-    model_name = 'seq2seq-qa-glove-att'
-
-    def __init__(self):
-        self.model = None
-        self.encoder_model = None
-        self.decoder_model = None
-        self.target_word2idx = None
-        self.target_idx2word = None
-        self.max_decoder_seq_length = None
-        self.max_encoder_seq_length = None
-        self.num_decoder_tokens = None
-        self.glove_model = GloveModel()
-
-        self.data_set_seq2seq = None
-        self.input_word2em_data = None
-        self.output_data = None
-        self.batch_size = None
-
 def generate_batch(ds, input_data, output_data, batch_size):
     num_batches = len(input_data) // batch_size
     while True:
@@ -64,6 +42,25 @@ def generate_batch(ds, input_data, output_data, batch_size):
                         decoder_target_data_batch[lineIdx, idx - 1, wid] = 1
             yield [encoder_input_paragraph_data_batch, encoder_input_question_data_batch,
                    decoder_input_data_batch], decoder_target_data_batch
+
+class Seq2SeqAtt(object):
+    model_name = 'seq2seq-qa-glove-att'
+
+    def __init__(self):
+        self.model = None
+        self.encoder_model = None
+        self.decoder_model = None
+        self.target_word2idx = None
+        self.target_idx2word = None
+        self.max_decoder_seq_length = None
+        self.max_encoder_seq_length = None
+        self.num_decoder_tokens = None
+        self.glove_model = GloveModel()
+
+        self.data_set_seq2seq = None
+        self.input_word2em_data = None
+        self.output_data = None
+        self.batch_size = None
 
     @staticmethod
     def get_architecture_file_path(model_dir_path):
@@ -217,9 +214,9 @@ def generate_batch(ds, input_data, output_data, batch_size):
         #        tensorflow.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
 #######################
 
-        history = self.model.fit(ds_train, steps_per_epoch=train_num_batches,
+        history = self.model.fit(train_gen, steps_per_epoch=train_num_batches,
                                            epochs=epochs,
-                                           verbose=1, validation_data=ds_test, validation_steps=test_num_batches,
+                                           verbose=1, validation_data=test_gen, validation_steps=test_num_batches,
                                            callbacks=[checkpoint])
 
         self.model.save_weights(weight_file_path)
