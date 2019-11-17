@@ -40,7 +40,7 @@ def load_squad(contexts, questions, answers, examples, data_path, max_data_count
                 break
 
 
-class SquADDataSetV2(QADataSet):
+class SquADDataSetV3(QADataSet):
 
     contexts = []
     questions = []
