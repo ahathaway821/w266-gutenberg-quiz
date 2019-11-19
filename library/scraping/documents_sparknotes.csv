@@ -1,0 +1,54 @@
+document_id,set,kind,story_url,story_file_size,wiki_url,wiki_title,story_word_count,story_start,story_end
+f5f30064-0b24-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/32325/pg32325.txt,0,,THE ADVENTURES OF HUCKLEBERRY FINN Mark Twain,0,<NOSTART>,<NOEND>
+02c245e8-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/228/228-0.txt,0,,AENEID Virgil,0,<NOSTART>,<NOEND>
+0885169a-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/14417/pg14417.txt,0,,"AGAMEMNON, THE CHOEPHORI, AND THE EUMENIDES Aeschylus",0,<NOSTART>,<NOEND>
+14785d22-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/11/11-0.txt,0,,ALICE'S ADVENTURES IN WONDERLAND Lewis Carroll,0,<NOSTART>,<NOEND>
+16bf21ba-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/2246/pg2246.txt,0,,ALL'S WELL THAT ENDS WELL William Shakespeare,0,<NOSTART>,<NOEND>
+18b6eafc-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/2268/pg2268.txt,0,,ANTONY AND CLEOPATRA William Shakespeare,0,<NOSTART>,<NOEND>
+1a92e48e-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/3618/pg3618.txt,0,,ARMS AND THE MAN George Bernard Shaw,0,<NOSTART>,<NOEND>
+1ab8d28e-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/148/pg148.txt,0,,THE AUTOBIOGRAPHY OF BENJAMIN FRANKLIN Benjamin Franklin,0,<NOSTART>,<NOEND>
+2390db68-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1156/1156-0.txt,0,,BABBITT Sinclair Lewis,0,<NOSTART>,<NOEND>
+2ffc2524-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/28054/28054-0.txt,0,,THE BROTHERS KARAMAZOV Fyodor Dostoevsky,0,<NOSTART>,<NOEND>
+3c64738e-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1184/1184-0.txt,0,,THE COUNT OF MONTE CRISTO Alexandre Dumas,0,<NOSTART>,<NOEND>
+4c797a4e-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/1254/pg1254.txt,0,,CYRANO DE BERGERAC Edmond Rostand,0,<NOSTART>,<NOEND>
+4c9d2cd2-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/996/996-0.txt,0,,DON QUIXOTE Miguel de Cervantes,0,<NOSTART>,<NOEND>
+644bc5be-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/2814/2814-0.txt,0,,DUBLINERS James Joyce,0,<NOSTART>,<NOEND>
+78afb060-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/84/84-0.txt,0,,FRANKENSTEIN Mary Shelley,0,<NOSTART>,<NOEND>
+8161a38a-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/17157/pg17157.txt,0,,GULLIVER'S TRAVELS Jonathan Swift,0,<NOSTART>,<NOEND>
+8ac75438-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/2265/pg2265.txt,0,,HAMLET William Shakespeare,0,<NOSTART>,<NOEND>
+9612aae0-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/786/786-0.txt,0,,HARD TIMES Charles Dickens,0,<NOSTART>,<NOEND>
+a330c284-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/219/219-0.txt,0,,HEART OF DARKNESS Joseph Conrad,0,<NOSTART>,<NOEND>
+a899a4b6-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/77/pg77.txt,0,,THE HOUSE OF THE SEVEN GABLES Nathaniel Hawthorne,0,<NOSTART>,<NOEND>
+b52f11f2-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/2638/2638-0.txt,0,,THE IDIOT Fyodor Dostoevsky,0,<NOSTART>,<NOEND>
+b6005aaa-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/16452/16452-0.txt,0,,THE ILIAD Homer,0,<NOSTART>,<NOEND>
+bf38e8da-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1522/1522-0.txt,0,,JULIUS CAESAR William Shakespeare,0,<NOSTART>,<NOEND>
+c4c29c88-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/1128/pg1128.txt,0,,KING LEAR William Shakespeare,0,<NOSTART>,<NOEND>
+cec4164e-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/1109/pg1109.txt,0,,LOVE'S LABOUR'S LOST William Shakespeare,0,<NOSTART>,<NOEND>
+d51cc54a-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1533/1533-0.txt,0,,MACBETH William Shakespeare,0,<NOSTART>,<NOEND>
+d840d432-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/143/143-0.txt,0,,THE MAYOR OF CASTERBRIDGE Thomas Hardy,0,<NOSTART>,<NOEND>
+dfb8a992-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1515/1515-0.txt,0,,THE MERCHANT OF VENICE William Shakespeare,0,<NOSTART>,<NOEND>
+ecd4a734-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/23044/23044-0.txt,0,,THE MERRY WIVES OF WINDSOR William Shakespeare,0,<NOSTART>,<NOEND>
+f5af56e2-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/5200/pg5200.txt,0,,THE METAMORPHOSIS AND OTHER STORIES Franz Kafka,0,<NOSTART>,<NOEND>
+f6ba4024-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1514/1514-0.txt,0,,A MIDSUMMER NIGHT'S DREAM William Shakespeare,0,<NOSTART>,<NOEND>
+fcc9712e-0b25-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/2701/2701-0.txt,0,,MOBY-DICK Herman Melville,0,<NOSTART>,<NOEND>
+09fa41ac-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/242/242-0.txt,0,,MY ÁNTONIA Willa Cather,0,<NOSTART>,<NOEND>
+101a1256-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/3160/3160-0.txt,0,,THE ODYSSEY Homer,0,<NOSTART>,<NOEND>
+147a67ba-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/730/pg730.txt,0,,OLIVER TWIST Charles Dickens,0,<NOSTART>,<NOEND>
+1d7ce798-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/2267/pg2267.txt,0,,OTHELLO William Shakespeare,0,<NOSTART>,<NOEND>
+24841f5c-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1342/1342-0.txt,0,,PRIDE AND PREJUDICE Jane Austen,0,<NOSTART>,<NOEND>
+2e2dda7a-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/3825/pg3825.txt,0,,PYGMALION George Bernard Shaw,0,<NOSTART>,<NOEND>
+35c86304-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/1103/pg1103.txt,0,,RICHARD III William Shakespeare,0,<NOSTART>,<NOEND>
+4321bd3e-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1513/1513-0.txt,0,,ROMEO AND JULIET William Shakespeare,0,<NOSTART>,<NOEND>
+4bcaf40a-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/233/233-0.txt,0,,SISTER CARRIE Theodore Dreiser,0,<NOSTART>,<NOEND>
+506e32ec-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/98/98-0.txt,0,,A TALE OF TWO CITIES Charles Dickens,0,<NOSTART>,<NOEND>
+59534a50-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1508/1508-0.txt,0,,THE TAMING OF THE SHREW William Shakespeare,0,<NOSTART>,<NOEND>
+61fc2000-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/23042/23042-0.txt,0,,THE TEMPEST William Shakespeare,0,<NOSTART>,<NOEND>
+6ec9afb4-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/110/110-0.txt,0,,TESS OF THE D'URBERVILLES Thomas Hardy,0,<NOSTART>,<NOEND>
+81a361a2-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1257/1257-0.txt,0,,THE THREE MUSKETEERS Alexandre Dumas,0,<NOSTART>,<NOEND>
+88217c08-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/120/120-0.txt,0,,TREASURE ISLAND Robert Louis Stevenson,0,<NOSTART>,<NOEND>
+8fa9a48c-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1526/1526-0.txt,0,,TWELFTH NIGHT William Shakespeare,0,<NOSTART>,<NOEND>
+95566f6e-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/203/203-0.txt,0,,UNCLE TOM'S CABIN Harriet Beecher Stowe,0,<NOSTART>,<NOEND>
+9f4c4c28-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/2600/2600-0.txt,0,,WAR AND PEACE Leo Tolstoy,0,<NOSTART>,<NOEND>
+ab6b3384-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/416/pg416.txt,0,,"WINESBURG, OHIO Sherwood Anderson",0,<NOSTART>,<NOEND>
+b00f5528-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,https://www.gutenberg.org/files/1539/1539-0.txt,0,,THE WINTER'S TALE William Shakespeare,0,<NOSTART>,<NOEND>
+b425f3b0-0b26-11ea-9221-c9dc32036b5d,test,gutenberg,http://www.gutenberg.org/cache/epub/768/pg768.txt,0,,WUTHERING HEIGHTS Emily Brontë,0,<NOSTART>,<NOEND>
