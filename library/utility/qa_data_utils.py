@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import nltk
 
-from library.utility.text_utils import in_white_list
+from .text_utils import in_white_list
 
 
 class QADataSet(object):
