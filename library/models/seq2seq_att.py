@@ -175,13 +175,6 @@ class Seq2SeqAtt(object):
         with open(architecture_file_path, 'w') as f:
             f.write(self.model.to_json())
 
-        self.data_set_seq2seq = data_set_seq2seq
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
-        self.batch_size = batch_size
-
         train_gen = generate_batch(data_set_seq2seq, x_train, y_train, batch_size)
         test_gen = generate_batch(data_set_seq2seq, x_test, y_test, batch_size)
 
@@ -205,7 +198,7 @@ class Seq2SeqAtt(object):
         #        tensorflow.contrib.cluster_resolver.TPUClusterResolver(TPU_WORKER)))
 #######################
 
-        history = self.model.fit(train_gen, steps_per_epoch=train_num_batches,
+        history = self.model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
                                            epochs=epochs,
                                            verbose=1, validation_data=test_gen, validation_steps=test_num_batches,
                                            callbacks=[checkpoint])

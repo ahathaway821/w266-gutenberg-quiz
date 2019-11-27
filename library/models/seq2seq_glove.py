@@ -134,6 +134,8 @@ class Seq2SeqGloveQA(object):
         train_num_batches = len(x_train) // batch_size
         test_num_batches = len(x_test) // batch_size
 
+        print(f'test num batches: {test_num_batches}')
+
         checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=save_best_only)
 
         history = self.model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
