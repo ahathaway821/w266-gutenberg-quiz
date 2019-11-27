@@ -38,8 +38,6 @@ def load_squad(contexts, questions, answers, examples, data_path, max_data_count
                     break
 
                 break
-
-
 class SquADDataSetV3(QADataSet):
 
     contexts = []
@@ -52,7 +50,7 @@ class SquADDataSetV3(QADataSet):
                  max_context_seq_length=None,
                  max_question_seq_length=None,
                  max_target_seq_length=None):
-        super(SquADDataSetV2, self).__init__()
+        super(SquADDataSetV3, self).__init__()
 
         load_squad(self.contexts, self.questions, self.answers, self.examples, data_path=data_path,
                    max_data_count=max_data_count,
