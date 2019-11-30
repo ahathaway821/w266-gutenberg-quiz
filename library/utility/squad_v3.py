@@ -4,7 +4,7 @@ import nltk
 from .qa_data_utils import QADataSet
 from .text_utils import in_white_list, preprocess_sentence
 
-def load_squad(contexts, questions, answers, data_path, max_data_count=None,
+def load_squad(contexts, questions, answers, examples, data_path, max_data_count=None,
                max_context_seq_length=None,
                max_question_seq_length=None,
                max_target_seq_length=None):
@@ -23,30 +23,36 @@ def load_squad(contexts, questions, answers, data_path, max_data_count=None,
                     answers_list = qas_instance['answers']
                     for answer in answers_list:
                         ans = answer['text']
-                        contexts.append(preprocess_sentence(context))
-                        questions.append(preprocess_sentence(question))
-                        answers.append(preprocess_sentence(ans))
+
+                        c = preprocess_sentence(context, False)
+                        q = preprocess_sentence(question, False)
+                        a = preprocess_sentence(ans, False)
+                        contexts.append(c)
+                        questions.append(q)
+                        answers.append(a)
+
+                        examples.append((q,c,a))
                         break #only take one answer
 
                 if max_data_count != None and len(contexts) >= max_data_count:
                     break
 
                 break
-
-
-class SquADDataSetV2(QADataSet):
+class SquADDataSetV3(QADataSet):
 
     contexts = []
     questions = []
     answers = []
 
+    examples = []
+
     def __init__(self, data_path, max_data_count=None,
                  max_context_seq_length=None,
                  max_question_seq_length=None,
                  max_target_seq_length=None):
-        super(SquADDataSetV2, self).__init__()
+        super(SquADDataSetV3, self).__init__()
 
-        load_squad(self.contexts, self.questions, self.answers, data_path=data_path,
+        load_squad(self.contexts, self.questions, self.answers, self.examples, data_path=data_path,
                    max_data_count=max_data_count,
                    max_context_seq_length=max_context_seq_length,
                    max_question_seq_length=max_question_seq_length,
@@ -56,7 +62,7 @@ class SquADDataSetV2(QADataSet):
                    max_context_seq_length=None,
                    max_question_seq_length=None,
                    max_target_seq_length=None):
-        load_squad(self.contexts, self.questions, self.answers, data_path,
+        load_squad(self.contexts, self.questions, self.answers, self.examples, data_path,
                    max_data_count=max_data_count,
                    max_context_seq_length=max_context_seq_length,
                    max_question_seq_length=max_question_seq_length,

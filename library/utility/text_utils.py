@@ -30,7 +30,7 @@ def unicode_to_ascii(s):
     return ''.join(c for c in unicodedata.normalize('NFD', s)
         if unicodedata.category(c) != 'Mn')
 
-def preprocess_sentence(w):
+def preprocess_sentence(w, includeStartEndTags=True):
     w = unicode_to_ascii(w.lower().strip())
 
     # creating a space between a word and the punctuation following it
@@ -46,7 +46,8 @@ def preprocess_sentence(w):
 
     # adding a start and an end token to the sentence
     # so that the model know when to start and stop predicting.
-    w = '<start> ' + w + ' <end>'
+    if includeStartEndTags:
+        w = '<start> ' + w + ' <end>'
     return w
 
 def create_dataset(path, num_examples):
