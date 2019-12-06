@@ -9,6 +9,7 @@ import traceback
 import csv
 import tfidf_functions
 from html.parser import HTMLParser
+import requests
 
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 narrative_qa_repo_filepath = "../../../narrativeqa"
@@ -30,18 +31,29 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
+def get_book_content(url):
+    headers = {'content-type': 'text/html', 'Accept-Charset': 'UTF-8'}
+    r = requests.get(url, headers=headers)
+
+    if (r == None):
+        raise Exception(f"Unable to find url {url}")
+    return r.content.decode("utf-8")
+
 # Read in an entire story based on document id
-def get_document_text(document_id):
+def get_document_text(document_id, book_url=None):
     try:
         text=""
-        try:
-            f=open(f"{narrative_qa_repo_filepath}/tmp/{document_id}.content", "r", encoding="utf-16")
-            text = f.read()
-            f.close()
-        except:
-            f=open(f"{narrative_qa_repo_filepath}/tmp/{document_id}.content", "r", encoding="ISO-8859-1")
-            text = f.read()
-            f.close()
+        if book_url is not None:
+            text = get_book_content(book_url)
+        else:
+            try:
+                f=open(f"{narrative_qa_repo_filepath}/tmp/{document_id}.content", "r", encoding="utf-16")
+                text = f.read()
+                f.close()
+            except:
+                f=open(f"{narrative_qa_repo_filepath}/tmp/{document_id}.content", "r", encoding="ISO-8859-1")
+                text = f.read()
+                f.close()
             
         #text = strip_tags(text)
         return text
@@ -146,9 +158,15 @@ class QAPair:
         
 # Load all question answer pairs for the available documents
 #document_id, set, question, answer1, answer2, question_tokenized, answer1_tokenized, answer2_tokenized.
-def get_question_answer_pairs():
+def get_question_answer_pairs(is_nqa=True):
     document_questions = {}
-    with open(f'{narrative_qa_repo_filepath}/qaps.csv', newline='') as csvfile:
+    qaps_path=""
+    if is_nqa:
+        qaps_path=f'{narrative_qa_repo_filepath}/qaps.csv'
+    else:
+        qaps_path="../scraping/qaps_sparknotes.csv"
+
+    with open(qaps_path, newline='') as csvfile:
         rows = csv.DictReader(csvfile, delimiter=',')
         for qpair in rows:
             document_id = qpair['document_id']
@@ -280,11 +298,15 @@ def set_data_split(data, book_data, data_split, train_data, valid_data, test_dat
     elif data_split == "test":
         test_data['data'].append(book_data) 
         
-def save_train_valid_test_data(data, train_data, valid_data, test_data):
-    target_directory = f"{data_directory_filepath}/nqa_squad_document_qa_passages"
+def save_train_valid_test_data(data, train_data, valid_data, test_data, is_nqa=True):
+    target_directory = ""
+    if is_nqa:
+        target_directory = f"{data_directory_filepath}/nqa_squad_document_qa_passages"
+    else:
+        target_directory = f"{data_directory_filepath}/sp_squad_document_qa_passages"
         
     mini_train_data = {}
-    mini_train_data['version']=version
+    mini_train_data['version']="1.0"
     mini_train_data['data'] = []
     mini_train_data['data'] = train_data['data'][0:1000]
     
@@ -330,8 +352,14 @@ def save_train_valid_test_data(data, train_data, valid_data, test_data):
 #}
 #]
 #}
-def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1):
-    with open(f'{narrative_qa_repo_filepath}/documents.csv') as f1:
+def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1, is_nqa=True):
+    documents_path=""
+    if is_nqa:
+        documents_path=f'{narrative_qa_repo_filepath}/documents.csv'
+    else:
+        documents_path='../scraping/documents_sparknotes.csv'
+
+    with open(documents_path) as f1:
         rows = csv.DictReader(f1, delimiter=',')
         i = 0 # document iterator index
         s = 0 # number of skipped question pairs
@@ -371,8 +399,8 @@ def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1):
                 book_data['document_id'] = document_id
                 book_data['paragraphs'] = []
 
-
-                text = get_document_text(document_id)
+                book_url = doc.get('story_url')
+                text = get_document_text(document_id, book_url)
                 text = text.replace('</b><b>', '\n\n')
                 #text = ' '.join(text.split())
 
@@ -402,7 +430,14 @@ def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1):
                     data_split = qa_pair.set_split
 
                 json_question_pairs = json.dumps(passages_to_write)
-                fq = open(f"{data_directory_filepath}/nqa_document_qa_passages/{document_id}.q_passages", "w")
+
+                # Store passages
+                passages_folder=""
+                if is_nqa:
+                    passages_folder="nqa_document_qa_passages"
+                else:
+                    passages_folder="sp_document_qa_passages"
+                fq = open(f"{data_directory_filepath}/{passages_folder}/{document_id}.q_passages", "w")
                 fq.write(json_question_pairs)
                 fq.close()
 
@@ -416,7 +451,7 @@ def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1):
                 print(f"Error processing qa pairs and passages for document {document_id}. Story no {i}")
                 break
 
-        save_train_valid_test_data(data, train_data, valid_data, test_data)
+        save_train_valid_test_data(data, train_data, valid_data, test_data, is_nqa)
         
         print(f'total question pairs: {q}')
         print(f'skipped pairs: {s}')
