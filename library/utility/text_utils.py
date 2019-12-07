@@ -40,7 +40,7 @@ def preprocess_sentence(w, includeStartEndTags=True):
     w = re.sub(r'[" "]+', " ", w)
 
     # replacing everything with space except (a-z, A-Z, ".", "?", "!", ",")
-    w = re.sub(r"[^a-zA-Z?.!,¿]+", " ", w)
+    w = re.sub(r"[^a-zA-Z?.!,¿123456789]+", " ", w)
 
     w = w.rstrip().strip()
 
