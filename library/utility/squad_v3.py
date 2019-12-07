@@ -34,10 +34,6 @@ def load_squad(contexts, questions, answers, examples, data_path, max_data_count
                         examples.append((q,c,a))
                         break #only take one answer
 
-                if max_data_count != None and len(contexts) >= max_data_count:
-                    break
-
-                break
 class SquADDataSetV3(QADataSet):
 
     contexts = []
