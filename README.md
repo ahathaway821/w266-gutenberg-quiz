@@ -17,8 +17,9 @@ In the library/scraping folder you will find scripts to run through the SparkNot
 In the library/retrieval folder, you will find scripts to pull back relevant text passages based on a query using tfidf. The majority of this functionality lives within tfidf_passage_retrieval.py, and can be run with the passage_retrieval.ipynb notebook.
 
 ### Models
+The primary transformer-pointer-generator model can be found in model_notebooks at transformer_pointer_generator.ipynb.
 
-
+Previous attempts at a basic LSTM based seq2seq model and a neural machine translation with attention base, halway through conversion to a question answering model, are included as well.
 
 
 Code References:
