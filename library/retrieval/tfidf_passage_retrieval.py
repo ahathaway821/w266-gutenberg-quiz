@@ -39,11 +39,24 @@ def get_book_content(url):
         raise Exception(f"Unable to find url {url}")
     return r.content.decode("utf-8")
 
+def load_nqa_summaries():
+    summaries_path = f"{narrative_qa_repo_filepath}/third_party/wikipedia/summaries.csv"
+    summaries= {}
+    with open(summaries_path, newline='') as csvfile:
+        rows = csv.DictReader(csvfile, delimiter=',')
+        for row in rows:
+            summaries[row["document_id"]] = row
+    
+    return summaries
+
+
 # Read in an entire story based on document id
-def get_document_text(document_id, book_url=None):
+def get_document_text(document_id, book_url=None, summaries=None):
     try:
         text=""
-        if book_url is not None:
+        if summaries is not None:
+            text = summaries[document_id]["summary_tokenized"]
+        elif book_url is not None:
             text = get_book_content(book_url)
         else:
             try:
@@ -112,15 +125,16 @@ def split_document_and_tfidf_vectorize_characters(text, num_characters=1500):
 
     
 # Split text into passages to serve as documents in tfidf
-def split_document_and_tfidf_vectorize_sentences(text, document_id, num_characters=1500):
-
+def split_document_and_tfidf_vectorize_sentences(text, document_id, num_characters=1000, use_summaries=False):
+    
     text = strip_tags(text)
     sentences = sent_detector.tokenize(text.strip())
     
-    if len(sentences) < 10:
+    if len(sentences) < 10 and not use_summaries:
         print(text)
         print(sentences)
-        print('heeeelp')
+        print('heeeelp sentences split')
+        print(use_summaries)
         print(f'doc id: {document_id}')
         return
     
@@ -141,9 +155,9 @@ def split_document_and_tfidf_vectorize_sentences(text, document_id, num_characte
         traceback.print_exc()
         print(passages)
 
-def split_document_and_tfidf_vectorize(text, document_id):
+def split_document_and_tfidf_vectorize(text, document_id, use_summaries=False):
     #return split_document_and_tfidf_vectorize_paragraphs(text, document_id)
-    return split_document_and_tfidf_vectorize_sentences(text, document_id)
+    return split_document_and_tfidf_vectorize_sentences(text, document_id, use_summaries=use_summaries)
         
 class QAPair:
     passages = []
@@ -255,6 +269,15 @@ def get_related_passages(passages, related_docs_indices):
 #                       #context:
 
 def convert_question_pair_to_squad_format(qa_pair, is_nqa=True):
+
+    
+    if len(qa_pair.passages) == 0:
+        print("no passages")
+    context = qa_pair.passages[0]
+    if len(qa_pair.passages) > 1:
+        context = " " + qa_pair.passages[1]
+    # else:
+    #     print("only 1 passage")
     data = {
         "qas": [
             {
@@ -271,7 +294,7 @@ def convert_question_pair_to_squad_format(qa_pair, is_nqa=True):
                 
             }
         ],
-        "context": qa_pair.passages[0]
+        "context": context
     }
 
     if is_nqa is False:
@@ -308,13 +331,18 @@ def get_doc_end(text, end_search):
                 doc_end = text.rfind(end_search)
     return doc_end, end_search
 
+# Documents that contain strange encoding or formats
 def document_is_on_skip_list(document_id):
     skip_list = ['09355a61a4d84807f9533f31d3263809cc486b6b',
                  "492f2d56eba93816e7d0958e2ba62d36d93bc97e", 
                  "bd14fef15878fdac1e9c2d2dbe52df0951f38aad",
                 "1aae28477e771b3af008ec59ce29086a1bc66776",
                 "3747036f950fe8f79cdaa0eb713104b9eb8af6c5",
-                "5283fa0a6ea69f4b4224d12018bbf985a2b80543"]
+                "5283fa0a6ea69f4b4224d12018bbf985a2b80543",
+                "00f9dbb0a851bc6099d5216e5fa8719b2ac3b82b",
+                "042bb7019f583cebe3290795149fdc70412ad813",
+                "f750ac4984453071cb5e82de093018e4d70a4f8d",
+                "fc2a7fbf6df700d88e47bfa3ec20842ab85d6252"]
     if document_id in skip_list:
         return True
     return False
@@ -329,10 +357,13 @@ def set_data_split(data, book_data, data_split, train_data, valid_data, test_dat
     elif data_split == "test":
         test_data['data'].append(book_data) 
         
-def save_train_valid_test_data(data, train_data, valid_data, test_data, is_nqa=True):
+def save_train_valid_test_data(data, train_data, valid_data, test_data, is_nqa=True, is_summaries=False):
     target_directory = ""
     if is_nqa:
-        target_directory = f"{data_directory_filepath}/nqa_squad_document_qa_passages"
+        if is_summaries:
+            target_directory = f"{data_directory_filepath}/nqa_sum_squad_document_qa_passages"
+        else:
+            target_directory = f"{data_directory_filepath}/nqa_squad_document_qa_passages"
     else:
         target_directory = f"{data_directory_filepath}/sp_squad_document_qa_passages"
         
@@ -383,12 +414,16 @@ def save_train_valid_test_data(data, train_data, valid_data, test_data, is_nqa=T
 #}
 #]
 #}
-def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1, is_nqa=True):
+def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1, is_nqa=True, use_summaries=False):
     documents_path=""
     if is_nqa:
         documents_path=f'{narrative_qa_repo_filepath}/documents.csv'
     else:
         documents_path='../scraping/documents_sparknotes.csv'
+
+    summaries=None
+    if use_summaries:
+        summaries = load_nqa_summaries()
 
     with open(documents_path) as f1:
         rows = csv.DictReader(f1, delimiter=',')
@@ -430,10 +465,11 @@ def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1, is_nq
                 book_data['document_id'] = document_id
                 book_data['paragraphs'] = []
 
-                book_url = doc.get('story_url')
-                text = get_document_text(document_id, book_url)
+                book_url=None
+                if is_nqa:
+                  book_url = doc.get('story_url')
+                  text = get_document_text(document_id, book_url, summaries)
                 text = text.replace('</b><b>', '\n\n')
-                #text = ' '.join(text.split())
 
                 doc_start, start_search = get_doc_start(text, doc['story_start'])
                 doc_end, end_search = get_doc_end(text, doc['story_end'])
@@ -441,7 +477,7 @@ def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1, is_nq
                 if doc_start != -1:
                     text = text[int(doc_start):int(doc_end)]
 
-                passages, tfidf, vectorizer = split_document_and_tfidf_vectorize(text, document_id)
+                passages, tfidf, vectorizer = split_document_and_tfidf_vectorize(text, document_id, use_summaries)
                 passages_to_write = {}
                 data_split = ""
                 
@@ -452,7 +488,6 @@ def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1, is_nq
                     qa_pair.passages = related_passages
 
                     if len(qa_pair.passages) == 0:
-                        #print(f'skipped pair: {document_id}')
                         s = s + 1
                         continue
 
@@ -482,7 +517,7 @@ def get_and_write_qa_passages_as_squad(document_questions, max_stories=-1, is_nq
                 print(f"Error processing qa pairs and passages for document {document_id}. Story no {i}")
                 break
 
-        save_train_valid_test_data(data, train_data, valid_data, test_data, is_nqa)
+        save_train_valid_test_data(data, train_data, valid_data, test_data, is_nqa, is_summaries=use_summaries)
         
         print(f'total question pairs: {q}')
         print(f'skipped pairs: {s}')

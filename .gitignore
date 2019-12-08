@@ -106,3 +106,5 @@ venv.bak/
 /data/nqa_document_qa_passages/*
 
 /data/nqa_squad_document_qa_passages/*
+
+/data/nqa_sum_squad_document_qa_passages/*
